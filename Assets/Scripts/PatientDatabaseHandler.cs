@@ -8,6 +8,7 @@ using System.Collections.Generic;
 public class PatientDatabaseHandler : MonoBehaviour {
 
 	private string connectionString;
+	private List<PatientProfile> patientProfile = new List<PatientProfile>();
 
 	// Use this for initialization
 	void Start () {
@@ -25,7 +26,7 @@ public class PatientDatabaseHandler : MonoBehaviour {
 	}
 
 	private void GetPatientData (int patient_id) {
-
+		patientProfile.Clear();
 		using (IDbConnection dbConnection = new SqliteConnection(connectionString)) {
 			dbConnection.Open();
 			using (IDbCommand dbCmd = dbConnection.CreateCommand()) {
@@ -35,7 +36,7 @@ public class PatientDatabaseHandler : MonoBehaviour {
 					while (reader.Read()) {
 						string first_name = reader.GetString(0);
 						string last_name = reader.GetString(1);
-						Debug.Log(first_name+last_name);
+						patientProfile.Add(new PatientProfile(first_name, last_name));
 					}
 					dbConnection.Close();
 					reader.Close();
