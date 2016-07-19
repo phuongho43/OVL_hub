@@ -8,7 +8,6 @@ using System.Collections.Generic;
 public class PatientDatabaseHandler : MonoBehaviour {
 
 	private string connectionString;
-	private List<PatientProfile> patientProfile = new List<PatientProfile>();
 
 	// Use this for initialization
 	void Start () {
@@ -16,7 +15,7 @@ public class PatientDatabaseHandler : MonoBehaviour {
 		connectionString = "URI=file:" + Application.dataPath + "/hubDB.db";
 		//InsertPatientData("Charlie", "Mander");
 		//DeletePatient(7);
-		GetPatientData();
+		GetPatientData(2);
 
 	}
 
@@ -25,19 +24,18 @@ public class PatientDatabaseHandler : MonoBehaviour {
 
 	}
 
-	private void GetPatientData () {
-		patientProfile.Clear();
+	private void GetPatientData (int patient_id) {
 
 		using (IDbConnection dbConnection = new SqliteConnection(connectionString)) {
 			dbConnection.Open();
 			using (IDbCommand dbCmd = dbConnection.CreateCommand()) {
-				string sqlQuery = "SELECT first_name, last_name from patients";
+				string sqlQuery = String.Format("SELECT first_name, last_name from patients where patient_id = {0}", patient_id);
 				dbCmd.CommandText = sqlQuery;
 				using (IDataReader reader = dbCmd.ExecuteReader()) {
 					while (reader.Read()) {
 						string first_name = reader.GetString(0);
 						string last_name = reader.GetString(1);
-						patientProfile.Add(new patientProfile(first_name,last_name));
+						Debug.Log(first_name+last_name);
 					}
 					dbConnection.Close();
 					reader.Close();
@@ -58,7 +56,7 @@ public class PatientDatabaseHandler : MonoBehaviour {
 		}
 	}
 
-	private void DeletePatient (int patient_id) {
+	private void DeletePatientData (int patient_id) {
 		using (IDbConnection dbConnection = new SqliteConnection(connectionString)) {
 			dbConnection.Open();
 			using (IDbCommand dbCmd = dbConnection.CreateCommand()) {
