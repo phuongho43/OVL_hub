@@ -8,10 +8,11 @@ using System.Collections.Generic;
 public class PatientDatabaseHandler : MonoBehaviour {
 
 	private string connectionString;
-	
+	private List<PatientProfile> patientProfile = new List<PatientProfile>();
+
 	// Use this for initialization
 	void Start () {
-		Debug.Log("Hello World");
+		//Debug.Log("Hello World");
 		connectionString = "URI=file:" + Application.dataPath + "/hubDB.db";
 		//InsertPatientData("Charlie", "Mander");
 		//DeletePatient(7);
@@ -25,6 +26,8 @@ public class PatientDatabaseHandler : MonoBehaviour {
 	}
 
 	private void GetPatientData () {
+		patientProfile.Clear();
+
 		using (IDbConnection dbConnection = new SqliteConnection(connectionString)) {
 			dbConnection.Open();
 			using (IDbCommand dbCmd = dbConnection.CreateCommand()) {
@@ -34,7 +37,7 @@ public class PatientDatabaseHandler : MonoBehaviour {
 					while (reader.Read()) {
 						string first_name = reader.GetString(0);
 						string last_name = reader.GetString(1);
-						Debug.Log(first_name + " " + last_name);
+						patientProfile.Add(new patientProfile(first_name,last_name));
 					}
 					dbConnection.Close();
 					reader.Close();
