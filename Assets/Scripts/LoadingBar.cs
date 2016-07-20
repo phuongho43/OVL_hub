@@ -2,6 +2,8 @@
 using UnityEngine.UI;
 using System.Collections;
 using System.Threading;
+
+
 public class LoadingBar : MonoBehaviour {
 
     public Transform Progress;
