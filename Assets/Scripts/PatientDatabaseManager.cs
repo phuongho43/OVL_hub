@@ -21,12 +21,22 @@ public class PatientDatabaseManager : MonoBehaviour {
 	public Text latest_visit_date_textbox;
 	public Text latest_visit_doc_textbox;
 
+    public Text firstname_input;
+    public Text lastname_input;
+    public Text gender_input;
+    public Text birthdate_input;
+    public Text weight_input;
+    public Text height_input;
+    public Text phone_input;
+    public Text appointment_input;
+    public Text latest_visit_date_input;
+    public Text latest_visit_doc_input;
+    public Text medications_input;
+    public Text conditions_input;
+
 	// Use this for initialization
 	void Start () {
-		//SetPatientData (2);
-		//InsertPatientData("Charlie", "Mander");
-		//DeletePatient(7);
-		//GetPatientData(2);
+		
 	}
 
 	// Update is called once per frame
@@ -72,18 +82,41 @@ public class PatientDatabaseManager : MonoBehaviour {
 		this.latest_visit_doc_textbox.GetComponent<Text>().text = data[10];
 	}
 
-	private void InsertPatientData (string first_name, string last_name) {
+    private void InsertPatientData (string first_name, string last_name, string gender,
+        string birthdate, string weight, string height, string phone, string appointment,
+        string latest_visit_date, string latest_visit_doc, string medications, string conditions) {
 		connectionString = "URI=file:" + Application.dataPath + "/hubDB.db";
 		using (IDbConnection dbConnection = new SqliteConnection(connectionString)) {
 			dbConnection.Open();
 			using (IDbCommand dbCmd = dbConnection.CreateCommand()) {
-				string sqlQuery = String.Format("INSERT INTO patients(first_name,last_name) VALUES('{0}', '{1}')", first_name, last_name);
+				string sqlQuery = String.Format(@"INSERT INTO patients(first_name,
+                last_name,gender,date_of_birth,weight,height,phone_number,appointments,
+                latest_visit_date,latest_visit_doctor,medications,medical_conditions) 
+                VALUES('{0}','{1}','{2}','{3}',{4}, {5},'{6}','{7}','{8}','{9}','{10}','{11}','{12}')",
+                first_name, last_name, gender, birthdate, weight, height, phone, appointment,
+                latest_visit_date, latest_visit_doc, medications, conditions);
 				dbCmd.CommandText = sqlQuery;
 				dbCmd.ExecuteScalar();
 				dbConnection.Close();
 			}
 		}
 	}
+
+    public void InsertPatientData() {
+        string first_name = this.firstname_input.GetComponent<InputField>().text;
+        string last_name = this.lastname_input.GetComponent<InputField>().text;
+        string gender = this.gender_input.GetComponent<InputField>().text;
+        string birth_date = this.birthdate_input.GetComponent<InputField>().text;
+        string weight = this.weight_input.GetComponent<InputField>().text;
+        string height = this.height_input.GetComponent<InputField>().text;
+        string phone = this.phone_input.GetComponent<InputField>().text;
+        string appointment = this.appointment_input.GetComponent<InputField>().text;
+        string latest_visit_date = this.latest_visit_date_input.GetComponent<InputField>().text;
+        string latest_visit_doc = this.latest_visit_doc_input.GetComponent<InputField>().text;
+        string medications = this.medications_input.GetComponent<InputField>().text;
+        string conditions = this.conditions_input.GetComponent<InputField>().text;
+        InsertPatientData(first_name,last_name,gender,birth_date,weight,height,phone,appointment,latest_visit_date,latest_visit_doc,medications,conditions);
+    }
 
 	private void DeletePatientData (int patient_id) {
 		connectionString = "URI=file:" + Application.dataPath + "/hubDB.db";
