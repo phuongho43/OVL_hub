@@ -26,7 +26,8 @@ public class PatientDatabaseManager : MonoBehaviour {
 	//Patient Profile inputs
     public Text firstname_input;
     public Text lastname_input;
-	public GameObject gender_input;
+	public GameObject gender_m_input;
+	public GameObject gender_f_input;
     public Text birthdate_input;
     public Text weight_input;
     public Text height_input;
@@ -45,6 +46,7 @@ public class PatientDatabaseManager : MonoBehaviour {
 
 	}
 
+    // Retrieves id of latest patient: used for grabbing data for the profile page right after submitting the form
 	public string MostRecentPatient() {
         string last_patient_id = "";
 		connectionString = "URI=file:" + Application.dataPath + "/hubDB.db";
@@ -89,6 +91,7 @@ public class PatientDatabaseManager : MonoBehaviour {
 		return patient_data;
 	}
 
+    // Changes text on patient profile according to data from GetPatientData
 	public void SetPatientData() {
         string patient_id = MostRecentPatient();
 		List<string> data = GetPatientData(patient_id);
@@ -97,26 +100,48 @@ public class PatientDatabaseManager : MonoBehaviour {
 		this.fullname_textbox.GetComponent<Text>().text = data[1] + " " + data[2];
 		this.gender_textbox.GetComponent<Text>().text = "Gender: " + data[3];
 		this.birthdate_textbox.GetComponent<Text>().text = "DoB: " + data[4];
-		this.weight_textbox.GetComponent<Text>().text = "Weight: " + data[5] + " Kg";
-		this.height_textbox.GetComponent<Text>().text = "Height: " + data[6] + " m";
+        this.weight_textbox.GetComponent<Text>().text = "Weight(Kg): " + data[5];
+        this.height_textbox.GetComponent<Text>().text = "Height(m): " + data[6];
 		this.phone_textbox.GetComponent<Text>().text = "Phone: " + data[7];
 		this.appointment_textbox.GetComponent<Text>().text = "Appt: " + data[8];
 		this.latest_visit_date_textbox.GetComponent<Text>().text = data[9];
 		this.latest_visit_doc_textbox.GetComponent<Text>().text = data[10];
 	}
 
-    private void InsertPatientData(string first_name, string last_name, string gender,
-        string birthdate, string weight, string height, string phone, string latest_visit_doc,
-		string medications, string conditions) {
+    private bool ConsistsOfWhiteSpace(string s){
+        foreach(char c in s){
+            if(c != ' ') return false;
+        }
+        return true;
+    }
+
+    private void InsertPatientData(Dictionary<string, string> data, string tableName) {
+        List<string> columns = new List<string>();
+        List<string> values = new List<string>();
+        // Exclude empty/whitespace strings where user didn't fill in the field
+        foreach (KeyValuePair<string, string> pair in data) {
+            if (ConsistsOfWhiteSpace(pair.Value)) {
+                
+            }
+            else {
+                columns.Add(pair.Key);
+                values.Add(pair.Value);
+            }
+        }
 		connectionString = "URI=file:" + Application.dataPath + "/hubDB.db";
 		using (IDbConnection dbConnection = new SqliteConnection(connectionString)) {
 			dbConnection.Open();
 			using (IDbCommand dbCmd = dbConnection.CreateCommand()) {
-				string sqlQuery = String.Format(@"INSERT INTO patients(first_name,
-                last_name,gender,date_of_birth,weight,height,phone_number,
-				latest_visit_doctor,medications,medical_conditions) 
-                VALUES('{0}','{1}','{2}','{3}',{4}, {5},'{6}','{7}','{8}','{9}')",
-                first_name, last_name, gender, birthdate, weight, height, phone, latest_visit_doc, medications, conditions);
+                string sqlQuery = "INSERT INTO " + tableName + " " + "(" + columns[0];
+                for (int i = 1; i < columns.Count; i++) {
+                    sqlQuery += ", " + columns[i];
+                }
+                sqlQuery += ") VALUES (" + "'" + values[0] + "'";
+                for(int i = 1; i < values.Count; i++) {
+                    sqlQuery += ", " + "'" + values[i] + "'";
+                }
+                sqlQuery += ")";
+                Debug.Log(sqlQuery);
 				dbCmd.CommandText = sqlQuery;
 				dbCmd.ExecuteScalar();
 				dbConnection.Close();
@@ -124,26 +149,30 @@ public class PatientDatabaseManager : MonoBehaviour {
 		}
 	}
 
-    public void InsertPatientData() {
-		string first_name = this.firstname_input.GetComponent<Text>().text;
-		string last_name = this.lastname_input.GetComponent<Text>().text;
-		bool genderbool = this.gender_input.GetComponent<Toggle>().isOn;
+	public void InsertPatientData() {
+		Dictionary<string, string> data = new Dictionary<string, string>();
+		data.Add("first_name", this.firstname_input.GetComponent<Text>().text);
+		data.Add("last_name", this.lastname_input.GetComponent<Text>().text);
+		bool malebool = this.gender_m_input.GetComponent<Toggle>().isOn;
+		bool femalebool = this.gender_f_input.GetComponent<Toggle>().isOn;
 		string gender;
-		if (genderbool == true) {
+		if (malebool == true) {
 			gender = "M";
-		} else {
+		} else if (femalebool == true) {
 			gender = "F";
+		} else {
+			gender = "";
 		}
-		string birth_date = this.birthdate_input.GetComponent<Text>().text;
-		string weight = this.weight_input.GetComponent<Text>().text;
-		string height = this.height_input.GetComponent<Text>().text;
-		string phone = this.phone_input.GetComponent<Text>().text;
-		string latest_visit_doc = this.latest_visit_doc_input.GetComponent<Text>().text;
-		string medications = this.medications_input.GetComponent<Text>().text;
-		string conditions = this.conditions_input.GetComponent<Text>().text;
-
-        InsertPatientData(first_name,last_name,gender,birth_date,weight,height,phone,latest_visit_doc,medications,conditions);
-    }
+		data.Add("gender", gender);
+        data.Add("date_of_birth", this.birthdate_input.GetComponent<Text>().text);
+        data.Add("weight", this.weight_input.GetComponent<Text>().text);
+        data.Add("height", this.height_input.GetComponent<Text>().text);
+        data.Add("phone_number", this.phone_input.GetComponent<Text>().text);
+        data.Add("latest_visit_doctor", this.latest_visit_doc_input.GetComponent<Text>().text);
+        data.Add("medications", this.medications_input.GetComponent<Text>().text);
+        data.Add("medical_conditions", this.conditions_input.GetComponent<Text>().text);
+		InsertPatientData(data, "patients");
+	}
 
 	private void DeletePatientData (int patient_id) {
 		connectionString = "URI=file:" + Application.dataPath + "/hubDB.db";

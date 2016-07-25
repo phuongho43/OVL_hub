@@ -10445,7 +10445,7 @@ GameObject:
   - 114: {fileID: 612520355}
   - 114: {fileID: 612520357}
   m_Layer: 5
-  m_Name: Toggle
+  m_Name: Male
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12566,7 +12566,7 @@ GameObject:
   - 114: {fileID: 709765376}
   - 114: {fileID: 709765378}
   m_Layer: 5
-  m_Name: Toggle
+  m_Name: Female
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -26825,7 +26825,8 @@ MonoBehaviour:
   latest_visit_doc_textbox: {fileID: 499052729}
   firstname_input: {fileID: 704631963}
   lastname_input: {fileID: 541459787}
-  gender_input: {fileID: 612520353}
+  gender_m_input: {fileID: 612520353}
+  gender_f_input: {fileID: 709765374}
   birthdate_input: {fileID: 754666686}
   weight_input: {fileID: 290125529}
   height_input: {fileID: 1003206274}
