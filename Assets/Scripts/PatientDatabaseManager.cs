@@ -151,8 +151,16 @@ public class PatientDatabaseManager : MonoBehaviour {
 
 	public void InsertPatientData() {
 		Dictionary<string, string> data = new Dictionary<string, string>();
-		data.Add("first_name", this.firstname_input.GetComponent<Text>().text);
-		data.Add("last_name", this.lastname_input.GetComponent<Text>().text);
+        string firstname = this.firstname_input.GetComponent<Text>().text;
+        string lastname = this.lastname_input.GetComponent<Text>().text;
+        if (ConsistsOfWhiteSpace(firstname)) {
+            firstname = "firstname";
+        }
+        if (ConsistsOfWhiteSpace(lastname)) {
+            lastname = "lastname";
+        }
+		data.Add("first_name", firstname);
+		data.Add("last_name", lastname);
 		bool malebool = this.gender_m_input.GetComponent<Toggle>().isOn;
 		bool femalebool = this.gender_f_input.GetComponent<Toggle>().isOn;
 		string gender;
@@ -171,7 +179,7 @@ public class PatientDatabaseManager : MonoBehaviour {
         data.Add("latest_visit_doctor", this.latest_visit_doc_input.GetComponent<Text>().text);
         data.Add("medications", this.medications_input.GetComponent<Text>().text);
         data.Add("medical_conditions", this.conditions_input.GetComponent<Text>().text);
-		InsertPatientData(data, "patients");
+        InsertPatientData(data, "patients");
 	}
 
 	private void DeletePatientData (int patient_id) {
