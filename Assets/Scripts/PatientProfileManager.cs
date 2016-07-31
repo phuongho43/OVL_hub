@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using MaterialUI;
+using UnityEngine.EventSystems;
 
 public class PatientProfileManager : MonoBehaviour {
 
@@ -42,7 +43,7 @@ public class PatientProfileManager : MonoBehaviour {
 	void Update () {
 	
 	}
-        
+    // Empties the textboxes after inserting the data; Having issues with MaterialUI's text inputs...    
     public void ClearForm() {
         firstname_input.GetComponent<InputField>().text = string.Empty;
         lastname_input.GetComponent<InputField>().text = string.Empty;
@@ -113,6 +114,5 @@ public class PatientProfileManager : MonoBehaviour {
             manager.InsertPatientData("patients", data);
             Debug.Log("AddPatientData: at least one inputfield was filled out");
         }
-        ClearForm();
     }
 }
