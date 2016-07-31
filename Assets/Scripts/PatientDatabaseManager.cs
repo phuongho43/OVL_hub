@@ -30,7 +30,7 @@ public class PatientDatabaseManager {
 				using (IDataReader reader = dbCmd.ExecuteReader()) {
 					while (reader.Read()) {
                         last_patient_id = reader.GetInt64(0).ToString();
-						Debug.Log("MostRecentPatient was called: " + last_patient_id);
+						Debug.Log("MostRecentPatient: " + last_patient_id);
 					}
 					dbConnection.Close();
 					reader.Close();
@@ -41,6 +41,7 @@ public class PatientDatabaseManager {
 	}
 
 	public List<string> GetPatientData(string patient_id) {
+        // Dictionary might be better if order of DB columns get changed
 		List<string> patient_data = new List<string>();
 		connectionString = "URI=file:" + Application.dataPath + "/hubDB.db";
 		using (IDbConnection dbConnection = new SqliteConnection(connectionString)) {
@@ -53,7 +54,7 @@ public class PatientDatabaseManager {
 						for (int i = 0; i < reader.FieldCount; i++) {
 							patient_data.Add(reader.GetValue(i).ToString());
 						}
-						Debug.Log("GetPatientData was called: " + patient_data[1]);
+						Debug.Log("GetPatientData: " + patient_data[1]);
 					}
 					dbConnection.Close();
 					reader.Close();
@@ -63,7 +64,7 @@ public class PatientDatabaseManager {
 		return patient_data;
 	}
 
-    public void InsertPatientData(Dictionary<string, string> data, string tableName) {
+    public void InsertPatientData(string tableName, Dictionary<string, string> data) {
         List<string> columns = new List<string>();
         List<string> values = new List<string>();
         // Exclude empty/whitespace strings where user didn't fill in the field
@@ -80,7 +81,7 @@ public class PatientDatabaseManager {
 		using (IDbConnection dbConnection = new SqliteConnection(connectionString)) {
 			dbConnection.Open();
 			using (IDbCommand dbCmd = dbConnection.CreateCommand()) {
-                string sqlQuery = "INSERT INTO " + tableName + " " + "(" + columns[0];
+                string sqlQuery = "INSERT INTO " + tableName + " (" + columns[0];
                 for (int i = 1; i < columns.Count; i++) {
                     sqlQuery += ", " + columns[i];
                 }
@@ -89,13 +90,43 @@ public class PatientDatabaseManager {
                     sqlQuery += ", " + "'" + values[i] + "'";
                 }
                 sqlQuery += ")";
-                Debug.Log(sqlQuery);
+                Debug.Log("InsertPatientData: " + sqlQuery);
 				dbCmd.CommandText = sqlQuery;
 				dbCmd.ExecuteScalar();
 				dbConnection.Close();
 			}
 		}
 	}
+
+    public void UpdatePatientData(string tableName, Dictionary<string, string> data, string patient_id) {
+        List<string> columns = new List<string>();
+        List<string> values = new List<string>();
+        // Exclude empty/whitespace strings where user didn't fill in the field
+        foreach (KeyValuePair<string, string> pair in data) {
+            if (ConsistsOfWhiteSpace(pair.Value)) {
+
+            }
+            else {
+                columns.Add(pair.Key);
+                values.Add(pair.Value);
+            }
+        }
+        connectionString = "URI=file:" + Application.dataPath + "/hubDB.db";
+        using (IDbConnection dbConnection = new SqliteConnection(connectionString)) {
+            dbConnection.Open();
+            using (IDbCommand dbCmd = dbConnection.CreateCommand()) {
+                string sqlQuery = "UPDATE " + tableName + " SET " + columns[0] + "='" + values[0] + "'";
+                for (int i = 1; i < columns.Count; i++) {
+                    sqlQuery += ", " + columns[i] + "='" + values[i] + "'";
+                }
+                sqlQuery += " WHERE patient_id='" + patient_id + "'";
+                Debug.Log("UpdatePatientData: " + sqlQuery);
+                dbCmd.CommandText = sqlQuery;
+                dbCmd.ExecuteScalar();
+                dbConnection.Close();
+            }
+        }
+    }
         
 	public void DeletePatientData (int patient_id) {
 		connectionString = "URI=file:" + Application.dataPath + "/hubDB.db";
