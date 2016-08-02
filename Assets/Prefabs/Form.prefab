@@ -47,7 +47,7 @@ GameObject:
   - 114: {fileID: 11494848}
   m_Layer: 5
   m_Name: Lastname InputField
-  m_TagString: Untagged
+  m_TagString: Lastname_Inputfield
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -150,7 +150,7 @@ GameObject:
   - 114: {fileID: 11474364}
   m_Layer: 5
   m_Name: Conditions Inputfield
-  m_TagString: Untagged
+  m_TagString: Conditions_Inputfield
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -558,7 +558,7 @@ GameObject:
   - 114: {fileID: 11422402}
   m_Layer: 5
   m_Name: Form
-  m_TagString: FormPrefab
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -576,7 +576,7 @@ GameObject:
   - 114: {fileID: 11415458}
   m_Layer: 5
   m_Name: Doctor InputField
-  m_TagString: Untagged
+  m_TagString: Doc_Inputfield
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -611,7 +611,7 @@ GameObject:
   - 114: {fileID: 11474744}
   m_Layer: 5
   m_Name: Meds InputField
-  m_TagString: Untagged
+  m_TagString: Meds_Inputfield
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -766,7 +766,7 @@ GameObject:
   - 114: {fileID: 11484044}
   m_Layer: 5
   m_Name: Gender InputField
-  m_TagString: Untagged
+  m_TagString: Gender_Inputfield
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -816,7 +816,7 @@ GameObject:
   - 114: {fileID: 11413202}
   m_Layer: 5
   m_Name: Phone InputField
-  m_TagString: Untagged
+  m_TagString: Phone_Inputfield
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -920,7 +920,7 @@ GameObject:
   - 114: {fileID: 11480198}
   m_Layer: 5
   m_Name: DoB InputField
-  m_TagString: Untagged
+  m_TagString: DoB_Inputfield
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -972,7 +972,7 @@ GameObject:
   - 114: {fileID: 11429604}
   m_Layer: 5
   m_Name: Firstname InputField
-  m_TagString: Untagged
+  m_TagString: Firstname_Inputfield
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1161,7 +1161,7 @@ GameObject:
   - 114: {fileID: 11496528}
   m_Layer: 5
   m_Name: Height InputField
-  m_TagString: Untagged
+  m_TagString: Height_Inputfield
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1213,7 +1213,7 @@ GameObject:
   - 114: {fileID: 11415290}
   m_Layer: 5
   m_Name: Weight InputField
-  m_TagString: Untagged
+  m_TagString: Weight_Inputfield
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1415,7 +1415,7 @@ MonoBehaviour:
   m_LineType: 2
   m_HideMobileInput: 0
   m_CharacterValidation: 0
-  m_CharacterLimit: 0
+  m_CharacterLimit: 20
   m_OnEndEdit:
     m_PersistentCalls:
       m_Calls: []
@@ -1556,7 +1556,7 @@ MonoBehaviour:
   m_LineType: 2
   m_HideMobileInput: 0
   m_CharacterValidation: 0
-  m_CharacterLimit: 0
+  m_CharacterLimit: 10
   m_OnEndEdit:
     m_PersistentCalls:
       m_Calls: []
@@ -1821,13 +1821,13 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 0}
   m_TextComponent: {fileID: 11452810}
   m_Placeholder: {fileID: 0}
-  m_ContentType: 0
+  m_ContentType: 4
   m_InputType: 0
   m_AsteriskChar: 42
-  m_KeyboardType: 0
-  m_LineType: 2
+  m_KeyboardType: 1
+  m_LineType: 0
   m_HideMobileInput: 0
-  m_CharacterValidation: 0
+  m_CharacterValidation: 3
   m_CharacterLimit: 0
   m_OnEndEdit:
     m_PersistentCalls:
@@ -2291,7 +2291,7 @@ MonoBehaviour:
   m_InputType: 0
   m_AsteriskChar: 42
   m_KeyboardType: 0
-  m_LineType: 2
+  m_LineType: 0
   m_HideMobileInput: 0
   m_CharacterValidation: 0
   m_CharacterLimit: 0
@@ -2672,14 +2672,14 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 0}
   m_TextComponent: {fileID: 11456908}
   m_Placeholder: {fileID: 0}
-  m_ContentType: 0
+  m_ContentType: 4
   m_InputType: 0
   m_AsteriskChar: 42
-  m_KeyboardType: 0
-  m_LineType: 2
+  m_KeyboardType: 1
+  m_LineType: 0
   m_HideMobileInput: 0
-  m_CharacterValidation: 0
-  m_CharacterLimit: 0
+  m_CharacterValidation: 3
+  m_CharacterLimit: 1
   m_OnEndEdit:
     m_PersistentCalls:
       m_Calls: []
@@ -2872,13 +2872,13 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 0}
   m_TextComponent: {fileID: 11424298}
   m_Placeholder: {fileID: 0}
-  m_ContentType: 0
+  m_ContentType: 3
   m_InputType: 0
   m_AsteriskChar: 42
-  m_KeyboardType: 0
-  m_LineType: 2
+  m_KeyboardType: 2
+  m_LineType: 0
   m_HideMobileInput: 0
-  m_CharacterValidation: 0
+  m_CharacterValidation: 2
   m_CharacterLimit: 0
   m_OnEndEdit:
     m_PersistentCalls:
@@ -3164,13 +3164,13 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 0}
   m_TextComponent: {fileID: 11460260}
   m_Placeholder: {fileID: 0}
-  m_ContentType: 0
+  m_ContentType: 4
   m_InputType: 0
   m_AsteriskChar: 42
-  m_KeyboardType: 0
-  m_LineType: 2
+  m_KeyboardType: 1
+  m_LineType: 0
   m_HideMobileInput: 0
-  m_CharacterValidation: 0
+  m_CharacterValidation: 3
   m_CharacterLimit: 0
   m_OnEndEdit:
     m_PersistentCalls:
@@ -3388,13 +3388,13 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 0}
   m_TextComponent: {fileID: 11460990}
   m_Placeholder: {fileID: 0}
-  m_ContentType: 0
+  m_ContentType: 3
   m_InputType: 0
   m_AsteriskChar: 42
-  m_KeyboardType: 0
-  m_LineType: 2
+  m_KeyboardType: 2
+  m_LineType: 0
   m_HideMobileInput: 0
-  m_CharacterValidation: 0
+  m_CharacterValidation: 2
   m_CharacterLimit: 0
   m_OnEndEdit:
     m_PersistentCalls:
@@ -4601,7 +4601,7 @@ RectTransform:
   m_RootOrder: 0
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.000030517578, y: 0}
+  m_AnchoredPosition: {x: 0.000030517578, y: 0}
   m_SizeDelta: {x: -0.000061035, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &22423166

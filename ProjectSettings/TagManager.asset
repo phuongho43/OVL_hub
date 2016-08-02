@@ -4,7 +4,16 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - FormPrefab
+  - Firstname_Inputfield
+  - Lastname_Inputfield
+  - Gender_Inputfield
+  - DoB_Inputfield
+  - Weight_Inputfield
+  - Height_Inputfield
+  - Phone_Inputfield
+  - Meds_Inputfield
+  - Conditions_Inputfield
+  - Doc_Inputfield
   layers:
   - Default
   - TransparentFX

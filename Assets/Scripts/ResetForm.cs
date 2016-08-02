@@ -10,7 +10,7 @@ public class ResetForm : MonoBehaviour {
         foreach (Transform child in Container.transform) {
             GameObject.Destroy(child.gameObject);
         }
-//        Destroy(Container.transform.GetChild);
+
         GameObject instance = Instantiate(Form) as GameObject;
         instance.transform.SetParent(Container.transform, false);
     }

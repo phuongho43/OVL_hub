@@ -20,16 +20,16 @@ public class PatientProfileManager : MonoBehaviour {
     public Text latest_visit_doc_textbox;
 
     //Patient Profile inputs
-    public GameObject firstname_input;
-    public GameObject lastname_input;
-    public GameObject gender_input;
-    public GameObject birthdate_input;
-    public GameObject weight_input;
-    public GameObject height_input;
-    public GameObject phone_input;
-    public GameObject latest_visit_doc_input;
-    public GameObject medications_input;
-    public GameObject conditions_input;
+    private string firstname_input;
+    private string lastname_input;
+    private string gender_input;
+    private string birthdate_input;
+    private string weight_input;
+    private string height_input;
+    private string phone_input;
+    private string latest_visit_doc_input;
+    private string medications_input;
+    private string conditions_input;
 
     public PatientDatabaseManager manager = new PatientDatabaseManager();
 
@@ -44,19 +44,19 @@ public class PatientProfileManager : MonoBehaviour {
 	
 	}
     // Empties the textboxes after inserting the data; Having issues with MaterialUI's text inputs...    
-    public void ClearForm() {
-        firstname_input.GetComponent<InputField>().text = string.Empty;
-        lastname_input.GetComponent<InputField>().text = string.Empty;
-        gender_input.GetComponent<InputField>().text = string.Empty;
-        birthdate_input.GetComponent<InputField>().text = string.Empty;
-        weight_input.GetComponent<InputField>().text = string.Empty;
-        height_input.GetComponent<InputField>().text = string.Empty;
-        phone_input.GetComponent<InputField>().text = string.Empty;
-        latest_visit_doc_input.GetComponent<InputField>().text = string.Empty;
-        medications_input.GetComponent<InputField>().text = string.Empty;
-        conditions_input.GetComponent<InputField>().text = string.Empty;
-        Debug.Log("ClearForm: " + firstname_input.GetComponent<InputField>().text);
-    }
+//    public void ClearForm() {
+//        firstname_input.GetComponent<InputField>().text = string.Empty;
+//        lastname_input.GetComponent<InputField>().text = string.Empty;
+//        gender_input.GetComponent<InputField>().text = string.Empty;
+//        birthdate_input.GetComponent<InputField>().text = string.Empty;
+//        weight_input.GetComponent<InputField>().text = string.Empty;
+//        height_input.GetComponent<InputField>().text = string.Empty;
+//        phone_input.GetComponent<InputField>().text = string.Empty;
+//        latest_visit_doc_input.GetComponent<InputField>().text = string.Empty;
+//        medications_input.GetComponent<InputField>().text = string.Empty;
+//        conditions_input.GetComponent<InputField>().text = string.Empty;
+//        Debug.Log("ClearForm: " + firstname_input.GetComponent<InputField>().text);
+//    }
 
     // Changes text on patient profile according to data from GetPatientData
     public void SetProfileData(string patient_id) {
@@ -81,9 +81,20 @@ public class PatientProfileManager : MonoBehaviour {
     public void AddPatientData() {
         Dictionary<string, string> data = new Dictionary<string, string>();
         // Targetting very specific input field objects on the form page
-        data.Add("first_name", this.firstname_input.GetComponent<InputField>().text);
-        data.Add("last_name", this.lastname_input.GetComponent<InputField>().text);
-        data.Add("gender", this.gender_input.GetComponent<InputField>().text);
+        // Maybe use FindGameObjectsWithTag instead to get a list
+        firstname_input = GameObject.FindGameObjectWithTag("Firstname_Inputfield").GetComponent<InputField>().text.Trim();
+        lastname_input = GameObject.FindGameObjectWithTag("Lastname_Inputfield").GetComponent<InputField>().text.Trim();
+        gender_input = GameObject.FindGameObjectWithTag("Gender_Inputfield").GetComponent<InputField>().text.Trim();
+        birthdate_input = GameObject.FindGameObjectWithTag("DoB_Inputfield").GetComponent<InputField>().text.Trim();
+        weight_input = GameObject.FindGameObjectWithTag("Weight_Inputfield").GetComponent<InputField>().text.Trim();
+        height_input = GameObject.FindGameObjectWithTag("Height_Inputfield").GetComponent<InputField>().text.Trim();
+        phone_input = GameObject.FindGameObjectWithTag("Phone_Inputfield").GetComponent<InputField>().text.Trim();
+        medications_input = GameObject.FindGameObjectWithTag("Meds_Inputfield").GetComponent<InputField>().text.Trim();
+        conditions_input = GameObject.FindGameObjectWithTag("Conditions_Inputfield").GetComponent<InputField>().text.Trim();
+        latest_visit_doc_input = GameObject.FindGameObjectWithTag("Doc_Inputfield").GetComponent<InputField>().text.Trim();
+        data.Add("first_name", firstname_input);
+        data.Add("last_name", lastname_input);
+        data.Add("gender", gender_input);
 //        bool malebool = this.gender_m_input.GetComponent<Toggle>().isOn;
 //        bool femalebool = this.gender_f_input.GetComponent<Toggle>().isOn;
 //        string gender;
@@ -95,13 +106,13 @@ public class PatientProfileManager : MonoBehaviour {
 //            gender = "";
 //        }
 //        data.Add("gender", gender);
-        data.Add("date_of_birth", this.birthdate_input.GetComponent<InputField>().text);
-        data.Add("weight", this.weight_input.GetComponent<InputField>().text);
-        data.Add("height", this.height_input.GetComponent<InputField>().text);
-        data.Add("phone_number", this.phone_input.GetComponent<InputField>().text);
-        data.Add("latest_visit_doctor", this.latest_visit_doc_input.GetComponent<InputField>().text);
-        data.Add("medications", this.medications_input.GetComponent<InputField>().text);
-        data.Add("medical_conditions", this.conditions_input.GetComponent<InputField>().text);
+        data.Add("date_of_birth", birthdate_input);
+        data.Add("weight", weight_input);
+        data.Add("height", height_input);
+        data.Add("phone_number", phone_input);
+        data.Add("latest_visit_doctor", latest_visit_doc_input);
+        data.Add("medications", medications_input);
+        data.Add("medical_conditions", conditions_input);
         Debug.Log("AddPatientData: " + data["first_name"]);
         // Addresses when the user enters nothing in the form
         bool goAhead = false;
