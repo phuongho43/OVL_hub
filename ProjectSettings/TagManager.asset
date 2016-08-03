@@ -14,6 +14,17 @@ TagManager:
   - Meds_Inputfield
   - Conditions_Inputfield
   - Doc_Inputfield
+  - MaterialButtonLayer
+  - MaterialText
+  - Fullname_ProfileText
+  - Gender_ProfileText
+  - DoB_ProfileText
+  - Weight_ProfileText
+  - Height_ProfileText
+  - Phone_ProfileText
+  - Appt_ProfileText
+  - Meds_ProfileHeader
+  - Conds_ProfileHeader
   layers:
   - Default
   - TransparentFX

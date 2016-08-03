@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
+using UnityEngine.EventSystems;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using MaterialUI;
-using UnityEngine.EventSystems;
 
 public class PatientProfileManager : MonoBehaviour {
 
@@ -31,6 +31,8 @@ public class PatientProfileManager : MonoBehaviour {
     private string medications_input;
     private string conditions_input;
 
+
+	// Reference to DB manager script to use methods
     public PatientDatabaseManager manager = new PatientDatabaseManager();
 
 
@@ -66,19 +68,19 @@ public class PatientProfileManager : MonoBehaviour {
         List<string> data = manager.GetPatientData(patient_id);
         Debug.Log("SetProfileData: " + patient_id);
         // Targetting very specific objects on the profile page
-        this.id_textbox.GetComponent<Text>().text = data[0];
-        this.fullname_textbox.GetComponent<Text>().text = data[1] + " " + data[2];
-        this.gender_textbox.GetComponent<Text>().text = "<b>Gender</b>: " + data[3];
-        this.birthdate_textbox.GetComponent<Text>().text = "<b>DoB</b>: " + data[4];
-        this.weight_textbox.GetComponent<Text>().text = "<b>Weight(Kg)</b>: " + data[5];
-        this.height_textbox.GetComponent<Text>().text = "<b>Height(m)</b>: " + data[6];
-        this.phone_textbox.GetComponent<Text>().text = "<b>Phone</b>: " + data[7];
-        this.appointment_textbox.GetComponent<Text>().text = "<b>Appt</b>: " + data[8];
-        this.latest_visit_date_textbox.GetComponent<Text>().text = data[9];
-        this.latest_visit_doc_textbox.GetComponent<Text>().text = data[10];
+        id_textbox.GetComponent<Text>().text = data[0];
+        fullname_textbox.GetComponent<Text>().text = data[1] + " " + data[2];
+        gender_textbox.GetComponent<Text>().text = data[3];
+        birthdate_textbox.GetComponent<Text>().text = data[4];
+        weight_textbox.GetComponent<Text>().text = data[5];
+        height_textbox.GetComponent<Text>().text = data[6];
+        phone_textbox.GetComponent<Text>().text = data[7];
+        appointment_textbox.GetComponent<Text>().text = data[8];
+        latest_visit_date_textbox.GetComponent<Text>().text = data[9];
+        latest_visit_doc_textbox.GetComponent<Text>().text = data[10];
     }
 
-    public void AddPatientData() {
+    public void GetAndAddFormInput() {
         Dictionary<string, string> data = new Dictionary<string, string>();
         // Targetting very specific input field objects on the form page
         // Maybe use FindGameObjectsWithTag instead to get a list
@@ -95,6 +97,7 @@ public class PatientProfileManager : MonoBehaviour {
         data.Add("first_name", firstname_input);
         data.Add("last_name", lastname_input);
         data.Add("gender", gender_input);
+		// If using radio buttons
 //        bool malebool = this.gender_m_input.GetComponent<Toggle>().isOn;
 //        bool femalebool = this.gender_f_input.GetComponent<Toggle>().isOn;
 //        string gender;
@@ -126,4 +129,22 @@ public class PatientProfileManager : MonoBehaviour {
             Debug.Log("AddPatientData: at least one inputfield was filled out");
         }
     }
+
+	public void GetAndAddDialogInput() {
+		string column_to_update = EventSystem.current.currentSelectedGameObject.tag;
+		Debug.Log(column_to_update);
+		Dictionary<string, string> TagToColumnName = new Dictionary<string, string>()
+		{
+			{"Fullname_ProfileText","first_name,last_name"},
+			{"Gender_ProfileText","gender"},
+			{"DoB_ProfileText","date_of_birth"},
+			{"Weight_ProfileText","weight"},
+			{"Height_ProfileText","height"},
+			{"Phone_ProfileText","phone_number"},
+			{"Appt_ProfileText","appointment"},
+			{"Meds_ProfileText","medications"},
+			{"Conds_ProfileText","medical_conditions"},
+		};
+		Debug.Log(TagToColumnName [column_to_update]);
+	}
 }
