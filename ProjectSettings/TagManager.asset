@@ -16,15 +16,19 @@ TagManager:
   - Doc_Inputfield
   - MaterialButtonLayer
   - MaterialText
-  - Fullname_ProfileText
-  - Gender_ProfileText
-  - DoB_ProfileText
-  - Weight_ProfileText
-  - Height_ProfileText
-  - Phone_ProfileText
-  - Appt_ProfileText
+  - Gender_ProfileLabel
+  - DoB_ProfileLabel
+  - Weight_ProfileLabel
+  - Height_ProfileLabel
+  - Phone_ProfileLabel
+  - Appt_ProfileLabel
   - Meds_ProfileHeader
   - Conds_ProfileHeader
+  - lvDate_ProfileText
+  - lvDoc_ProfileText
+  - UpdateProfileDialog_Inputfield
+  - Firstname_ProfileText
+  - Lastname_ProfileText
   layers:
   - Default
   - TransparentFX

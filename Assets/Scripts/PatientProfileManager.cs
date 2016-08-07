@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.EventSystems;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
@@ -7,9 +8,10 @@ using MaterialUI;
 
 public class PatientProfileManager : MonoBehaviour {
 
-    //Patient Profile outputs
+    // Patient Profile outputs
     public Text id_textbox;
-    public Text fullname_textbox;
+    public Text firstname_textbox;
+    public Text lastname_textbox;
     public Text gender_textbox;
     public Text birthdate_textbox;
     public Text weight_textbox;
@@ -19,7 +21,7 @@ public class PatientProfileManager : MonoBehaviour {
     public Text latest_visit_date_textbox;
     public Text latest_visit_doc_textbox;
 
-    //Patient Profile inputs
+    // Patient Profile inputs
     private string firstname_input;
     private string lastname_input;
     private string gender_input;
@@ -31,6 +33,8 @@ public class PatientProfileManager : MonoBehaviour {
     private string medications_input;
     private string conditions_input;
 
+    // Passing List of Params to Dialog for Updating profiles
+    private string updateColumn;
 
 	// Reference to DB manager script to use methods
     public PatientDatabaseManager manager = new PatientDatabaseManager();
@@ -69,7 +73,8 @@ public class PatientProfileManager : MonoBehaviour {
         Debug.Log("SetProfileData: " + patient_id);
         // Targetting very specific objects on the profile page
         id_textbox.GetComponent<Text>().text = data[0];
-        fullname_textbox.GetComponent<Text>().text = data[1] + " " + data[2];
+        firstname_textbox.GetComponent<Text>().text = data[1];
+        lastname_textbox.GetComponent<Text>().text = data[2];
         gender_textbox.GetComponent<Text>().text = data[3];
         birthdate_textbox.GetComponent<Text>().text = data[4];
         weight_textbox.GetComponent<Text>().text = data[5];
@@ -130,21 +135,31 @@ public class PatientProfileManager : MonoBehaviour {
         }
     }
 
-	public void GetAndAddDialogInput() {
-		string column_to_update = EventSystem.current.currentSelectedGameObject.tag;
-		Debug.Log(column_to_update);
+    public void GetCorrespondingColumn() {
+        // Get tag of game object that was just clicked on
+        string objectTag = EventSystem.current.currentSelectedGameObject.tag;
 		Dictionary<string, string> TagToColumnName = new Dictionary<string, string>()
 		{
-			{"Fullname_ProfileText","first_name,last_name"},
-			{"Gender_ProfileText","gender"},
-			{"DoB_ProfileText","date_of_birth"},
-			{"Weight_ProfileText","weight"},
-			{"Height_ProfileText","height"},
-			{"Phone_ProfileText","phone_number"},
-			{"Appt_ProfileText","appointment"},
-			{"Meds_ProfileText","medications"},
-			{"Conds_ProfileText","medical_conditions"},
+			{"Firstname_ProfileText","first_name"},
+            {"Lastname_ProfileText","last_name"},
+			{"Gender_ProfileLabel","gender"},
+			{"DoB_ProfileLabel","date_of_birth"},
+			{"Weight_ProfileLabel","weight"},
+			{"Height_ProfileLabel","height"},
+			{"Phone_ProfileLabel","phone_number"},
+			{"Appt_ProfileLabel","appointment"},
 		};
-		Debug.Log(TagToColumnName [column_to_update]);
+        Debug.Log("GetCorrespondingColumn: " + TagToColumnName[objectTag]);
+        updateColumn = TagToColumnName[objectTag];
 	}
+
+    public void GetAndAddDialogInput() {
+        string patient_id = id_textbox.GetComponent<Text>().text;
+        Dictionary<string,string> columnAndValue = new Dictionary<string,string>();
+        string updateValue = GameObject.FindGameObjectWithTag("UpdateProfileDialog_Inputfield").GetComponent<InputField>().text.Trim();
+        columnAndValue.Add(updateColumn, updateValue);
+        manager.UpdatePatientData("patients", columnAndValue, patient_id);
+        SetProfileData(patient_id);
+        GameObject.FindGameObjectWithTag("UpdateProfileDialog_Inputfield").GetComponent<InputField>().text = string.Empty;
+    }
 }
