@@ -21,7 +21,7 @@ namespace MaterialUI
 		{
 			//	Example of what you can do when an item is selected
 			config = gameObject.GetComponent<SelectionBoxConfig> ();
-			config.ItemPicked += DoThing;
+			config.ItemPicked += DoThing; //config.ItemPicked is the id of the selected value
 		}
 
 		void OnDisable ()
@@ -31,7 +31,7 @@ namespace MaterialUI
 
 		void DoThing (int id)
 		{
-			Debug.Log ("'" + config.listItems[id] + "' picked, ID: " + id);
+			Debug.Log ("'" + config.listItems[id] + "' picked, ID: " + id); // config.listItems is the list of possible values
 		}
 	}
 }

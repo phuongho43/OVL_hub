@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using System.Linq;
 using System.Collections;
@@ -8,7 +9,7 @@ using MaterialUI;
 
 public class PatientProfileManager : MonoBehaviour {
 
-    // Patient Profile outputs
+    // Patient Profile Outputs
     public Text id_textbox;
     public Text firstname_textbox;
     public Text lastname_textbox;
@@ -21,7 +22,13 @@ public class PatientProfileManager : MonoBehaviour {
     public Text latest_visit_date_textbox;
     public Text latest_visit_doc_textbox;
 
-    // Patient Profile inputs
+    // Main Page Search for Patients
+    public GameObject mp_searchSelector;
+    public GameObject mp_searchInputfield;
+    public Transform results_ScrollContent;
+    public GameObject results_ItemPrefab;
+
+    // Patient Profile Inputs
     private string firstname_input;
     private string lastname_input;
     private string gender_input;
@@ -36,9 +43,8 @@ public class PatientProfileManager : MonoBehaviour {
     // Passing List of Params to Dialog for Updating profiles
     private string updateColumn;
 
-	// Reference to DB manager script to use methods
-    public PatientDatabaseManager manager = new PatientDatabaseManager();
-
+	// Reference to DB dbManager script to use methods
+    public PatientDatabaseManager dbManager = new PatientDatabaseManager();
 
 	// Use this for initialization
 	void Start () {
@@ -47,7 +53,9 @@ public class PatientProfileManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
+//        if (EventSystem.current.currentSelectedGameObject.tag == "SearchPatients" && Input.GetKeyDown(KeyCode.Return)) {
+//            RefreshSearchResultsPanel();
+//        }
 	}
     // Empties the textboxes after inserting the data; Having issues with MaterialUI's text inputs...    
 //    public void ClearForm() {
@@ -67,10 +75,11 @@ public class PatientProfileManager : MonoBehaviour {
     // Changes text on patient profile according to data from GetPatientData
     public void SetProfileData(string patient_id) {
         if (patient_id == "new") {
-            patient_id = manager.MostRecentPatient();
+            patient_id = dbManager.MostRecentPatient();
         }
-        List<string> data = manager.GetPatientData(patient_id);
-        Debug.Log("SetProfileData: " + patient_id);
+        string cond = "patient_id = " + "'" + patient_id + "'";
+        List<string> data = dbManager.GetPatientData("*", "patients", cond);
+        //Debug.Log("SetProfileData: " + patient_id);
         // Targetting very specific objects on the profile page
         id_textbox.GetComponent<Text>().text = data[0];
         firstname_textbox.GetComponent<Text>().text = data[1];
@@ -121,17 +130,17 @@ public class PatientProfileManager : MonoBehaviour {
         data.Add("latest_visit_doctor", latest_visit_doc_input);
         data.Add("medications", medications_input);
         data.Add("medical_conditions", conditions_input);
-        Debug.Log("AddPatientData: " + data["first_name"]);
+        //Debug.Log("AddPatientData: " + data["first_name"]);
         // Addresses when the user enters nothing in the form
         bool goAhead = false;
         foreach (KeyValuePair<string, string> pair in data) {
-            if (!manager.ConsistsOfWhiteSpace(pair.Value)) {
+            if (!dbManager.ConsistsOfWhiteSpace(pair.Value)) {
                 goAhead = true;
             }
         }
         if (goAhead) {
-            manager.InsertPatientData("patients", data);
-            Debug.Log("AddPatientData: at least one inputfield was filled out");
+            dbManager.InsertPatientData("patients", data);
+            //Debug.Log("AddPatientData: at least one inputfield was filled out");
         }
     }
 
@@ -149,7 +158,7 @@ public class PatientProfileManager : MonoBehaviour {
 			{"Phone_ProfileLabel","phone_number"},
 			{"Appt_ProfileLabel","appointment"},
 		};
-        Debug.Log("GetCorrespondingColumn: " + TagToColumnName[objectTag]);
+        //Debug.Log("GetCorrespondingColumn: " + TagToColumnName[objectTag]);
         updateColumn = TagToColumnName[objectTag];
 	}
 
@@ -158,8 +167,49 @@ public class PatientProfileManager : MonoBehaviour {
         Dictionary<string,string> columnAndValue = new Dictionary<string,string>();
         string updateValue = GameObject.FindGameObjectWithTag("UpdateProfileDialog_Inputfield").GetComponent<InputField>().text.Trim();
         columnAndValue.Add(updateColumn, updateValue);
-        manager.UpdatePatientData("patients", columnAndValue, patient_id);
+        dbManager.UpdatePatientData("patients", columnAndValue, patient_id);
         SetProfileData(patient_id);
         GameObject.FindGameObjectWithTag("UpdateProfileDialog_Inputfield").GetComponent<InputField>().text = string.Empty;
+    }
+
+    public void SearchForPatients() {
+        List<string> data = new List<string>();
+        string cond;
+        int selectedIndex = mp_searchSelector.GetComponent<SelectionBoxConfig>().currentSelection;
+        string selectedItem = mp_searchSelector.GetComponent<SelectionBoxConfig>().listItems[selectedIndex];
+        //Debug.Log(selectedItem);
+        string searchWord = mp_searchInputfield.GetComponent<InputField>().text.Trim();
+        mp_searchInputfield.GetComponent<InputField>().text = string.Empty;
+        // NEED EXCEPTION HANDLING! ///////////////////////////////////////////////////////////////////////////////////
+        if (selectedItem == "ID") {
+            cond = "patient_id = " + "'" + searchWord + "'";
+            data = dbManager.GetPatientData("patient_id, first_name, last_name", "patients", cond);
+        } else if (selectedItem == "Lastname") {
+            cond = "last_name LIKE " + "'%" + searchWord + "%'";
+            data = dbManager.GetPatientData("patient_id, first_name, last_name", "patients", cond);
+        } else if (selectedItem == "Phone") {
+            cond = "phone_number = " + "'" + searchWord + "'";
+            data = dbManager.GetPatientData("patient_id, first_name, last_name", "patients", cond);
+        }
+        //Debug.Log(data[0]);
+        foreach (Transform child in results_ScrollContent.transform) {
+            GameObject.Destroy(child.gameObject);
+        }
+        ScreenManager screenManager = GameObject.FindGameObjectWithTag("ScreenManager").GetComponent<ScreenManager>();
+        GameObject startTestButton = GameObject.FindGameObjectWithTag("StartTest_Button");
+        GameObject deleteProfileButton = GameObject.FindGameObjectWithTag("DeleteProfile_Button");
+        Debug.Log(deleteProfileButton);
+        for (int i = 0; i < data.Count/3; i++) {
+            GameObject instance = Instantiate(results_ItemPrefab) as GameObject;
+            instance.GetComponentInChildren<Text>().text = "[" + data[i*3] + "]" + " " + data[i*3 + 1] + " " + data[i*3 + 2];
+            instance.transform.SetParent(results_ScrollContent.transform, false);
+            string current_id = data[i * 3];
+            instance.GetComponent<Button>().onClick.AddListener(() => {
+                SetProfileData(current_id);
+                screenManager.Set("Dashboard");
+//                startTestButton.SetActive(true);
+//                deleteProfileButton.SetActive(true);
+            });
+        }
     }
 }

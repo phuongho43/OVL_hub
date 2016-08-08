@@ -30,7 +30,7 @@ public class PatientDatabaseManager {
 				using (IDataReader reader = dbCmd.ExecuteReader()) {
 					while (reader.Read()) {
                         last_patient_id = reader.GetInt64(0).ToString();
-						Debug.Log("MostRecentPatient: " + last_patient_id);
+						//Debug.Log("MostRecentPatient: " + last_patient_id);
 					}
 					dbConnection.Close();
 					reader.Close();
@@ -40,27 +40,29 @@ public class PatientDatabaseManager {
 		return last_patient_id;
 	}
 
-	public List<string> GetPatientData(string patient_id) {
+    public List<string> GetPatientData(string col,string tablename, string cond) {
         // Dictionary might be better if order of DB columns get changed
 		List<string> patient_data = new List<string>();
 		connectionString = "URI=file:" + Application.dataPath + "/hubDB.db";
 		using (IDbConnection dbConnection = new SqliteConnection(connectionString)) {
 			dbConnection.Open();
 			using (IDbCommand dbCmd = dbConnection.CreateCommand()) {
-				string sqlQuery = String.Format("SELECT * from patients where patient_id = {0}", patient_id);
+                string sqlQuery = String.Format("SELECT {0} FROM {1} WHERE {2}", col, tablename, cond);
+                //Debug.Log("GetPatientData: " + sqlQuery);
 				dbCmd.CommandText = sqlQuery;
 				using (IDataReader reader = dbCmd.ExecuteReader()) {
 					while (reader.Read()) {
+                        //Debug.Log("GetPatientData: " + reader.FieldCount);
 						for (int i = 0; i < reader.FieldCount; i++) {
 							patient_data.Add(reader.GetValue(i).ToString());
 						}
-						Debug.Log("GetPatientData: " + patient_data[1]);
 					}
 					dbConnection.Close();
 					reader.Close();
 				}
 			}
 		}
+        //patient_data.ForEach(item => Debug.Log(item));
 		return patient_data;
 	}
 
@@ -90,7 +92,7 @@ public class PatientDatabaseManager {
                     sqlQuery += ", " + "'" + values[i] + "'";
                 }
                 sqlQuery += ")";
-                Debug.Log("InsertPatientData: " + sqlQuery);
+                //Debug.Log("InsertPatientData: " + sqlQuery);
 				dbCmd.CommandText = sqlQuery;
 				dbCmd.ExecuteScalar();
 				dbConnection.Close();
@@ -120,7 +122,7 @@ public class PatientDatabaseManager {
                     sqlQuery += ", " + columns[i] + "='" + values[i] + "'";
                 }
                 sqlQuery += " WHERE patient_id='" + patient_id + "'";
-                Debug.Log("UpdatePatientData: " + sqlQuery);
+                //Debug.Log("UpdatePatientData: " + sqlQuery);
                 dbCmd.CommandText = sqlQuery;
                 dbCmd.ExecuteScalar();
                 dbConnection.Close();

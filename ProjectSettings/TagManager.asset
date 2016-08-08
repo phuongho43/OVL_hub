@@ -29,6 +29,10 @@ TagManager:
   - UpdateProfileDialog_Inputfield
   - Firstname_ProfileText
   - Lastname_ProfileText
+  - ScreenManager
+  - 3Lined_Button
+  - StartTest_Button
+  - DeleteProfile_Button
   layers:
   - Default
   - TransparentFX
