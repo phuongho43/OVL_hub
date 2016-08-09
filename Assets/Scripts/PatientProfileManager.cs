@@ -157,6 +157,8 @@ public class PatientProfileManager : MonoBehaviour {
 			{"Height_ProfileLabel","height"},
 			{"Phone_ProfileLabel","phone_number"},
 			{"Appt_ProfileLabel","appointment"},
+            {"lvDate_ProfileText","latest_visit_date"},
+            {"lvDoc_ProfileText","latest_visit_doctor"},
 		};
         //Debug.Log("GetCorrespondingColumn: " + TagToColumnName[objectTag]);
         updateColumn = TagToColumnName[objectTag];
@@ -180,7 +182,6 @@ public class PatientProfileManager : MonoBehaviour {
         //Debug.Log(selectedItem);
         string searchWord = mp_searchInputfield.GetComponent<InputField>().text.Trim();
         mp_searchInputfield.GetComponent<InputField>().text = string.Empty;
-        // NEED EXCEPTION HANDLING! ///////////////////////////////////////////////////////////////////////////////////
         if (selectedItem == "ID") {
             cond = "patient_id = " + "'" + searchWord + "'";
             data = dbManager.GetPatientData("patient_id, first_name, last_name", "patients", cond);
@@ -196,8 +197,8 @@ public class PatientProfileManager : MonoBehaviour {
             GameObject.Destroy(child.gameObject);
         }
         ScreenManager screenManager = GameObject.FindGameObjectWithTag("ScreenManager").GetComponent<ScreenManager>();
-        GameObject startTestButton = GameObject.FindGameObjectWithTag("StartTest_Button");
-        GameObject deleteProfileButton = GameObject.FindGameObjectWithTag("DeleteProfile_Button");
+        GameObject startTestButton = GameObject.FindGameObjectWithTag("StartTest_Button").transform.GetChild(0).gameObject;
+        GameObject deleteProfileButton = GameObject.FindGameObjectWithTag("DeleteProfile_Button").transform.GetChild(0).gameObject;
         Debug.Log(deleteProfileButton);
         for (int i = 0; i < data.Count/3; i++) {
             GameObject instance = Instantiate(results_ItemPrefab) as GameObject;
@@ -207,8 +208,8 @@ public class PatientProfileManager : MonoBehaviour {
             instance.GetComponent<Button>().onClick.AddListener(() => {
                 SetProfileData(current_id);
                 screenManager.Set("Dashboard");
-//                startTestButton.SetActive(true);
-//                deleteProfileButton.SetActive(true);
+                startTestButton.SetActive(true);
+                deleteProfileButton.SetActive(true);
             });
         }
     }
