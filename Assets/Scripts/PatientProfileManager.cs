@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
+using System;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
@@ -21,6 +22,10 @@ public class PatientProfileManager : MonoBehaviour {
     public Text appointment_textbox;
     public Text latest_visit_date_textbox;
     public Text latest_visit_doc_textbox;
+    public Transform meds_ScrollContent;
+    public GameObject meds_ItemPrefab;
+    public Transform conds_ScrollContent;
+    public GameObject conds_ItemPrefab;
 
     // Main Page Search for Patients
     public GameObject mp_searchSelector;
@@ -92,6 +97,25 @@ public class PatientProfileManager : MonoBehaviour {
         appointment_textbox.GetComponent<Text>().text = data[8];
         latest_visit_date_textbox.GetComponent<Text>().text = data[9];
         latest_visit_doc_textbox.GetComponent<Text>().text = data[10];
+        char[] delimiters = new char[] { ',' };
+        List<string> listOfMeds = data[11].Split(delimiters, StringSplitOptions.RemoveEmptyEntries).ToList();
+        List<string> listOfConds = data[12].Split(delimiters, StringSplitOptions.RemoveEmptyEntries).ToList();
+        foreach (Transform child in meds_ScrollContent.transform) {
+            GameObject.Destroy(child.gameObject);
+        }
+        foreach (Transform child in conds_ScrollContent.transform) {
+            GameObject.Destroy(child.gameObject);
+        }
+        for (int i = 0; i < listOfMeds.Count; i++) {
+            GameObject medItem = Instantiate(meds_ItemPrefab) as GameObject;
+            medItem.GetComponentInChildren<Text>().text = listOfMeds[i];
+            medItem.transform.SetParent(meds_ScrollContent.transform, false);
+        }
+        for (int i = 0; i < listOfConds.Count; i++) {
+            GameObject condItem = Instantiate(conds_ItemPrefab) as GameObject;
+            condItem.GetComponentInChildren<Text>().text = listOfConds[i];
+            condItem.transform.SetParent(conds_ScrollContent.transform, false);
+        }
     }
 
     public void GetAndAddFormInput() {
@@ -159,10 +183,19 @@ public class PatientProfileManager : MonoBehaviour {
 			{"Appt_ProfileLabel","appointment"},
             {"lvDate_ProfileText","latest_visit_date"},
             {"lvDoc_ProfileText","latest_visit_doctor"},
+            {"EditMeds_Icon","medications"},
+            {"EditConds_Icon","medical_conditions"},
 		};
         //Debug.Log("GetCorrespondingColumn: " + TagToColumnName[objectTag]);
         updateColumn = TagToColumnName[objectTag];
 	}
+
+    public void preFillInputField() {
+        string patient_id = id_textbox.GetComponent<Text>().text;
+        string cond = "patient_id = " + "'" + patient_id + "'";
+        string currentValue = dbManager.GetPatientData(updateColumn, "patients", cond)[0];
+        GameObject.FindGameObjectWithTag("UpdateProfileDialog_Inputfield").GetComponent<InputField>().text = currentValue;
+    }
 
     public void GetAndAddDialogInput() {
         string patient_id = id_textbox.GetComponent<Text>().text;
@@ -199,7 +232,7 @@ public class PatientProfileManager : MonoBehaviour {
         ScreenManager screenManager = GameObject.FindGameObjectWithTag("ScreenManager").GetComponent<ScreenManager>();
         GameObject startTestButton = GameObject.FindGameObjectWithTag("StartTest_Button").transform.GetChild(0).gameObject;
         GameObject deleteProfileButton = GameObject.FindGameObjectWithTag("DeleteProfile_Button").transform.GetChild(0).gameObject;
-        Debug.Log(deleteProfileButton);
+        //Debug.Log(deleteProfileButton);
         for (int i = 0; i < data.Count/3; i++) {
             GameObject instance = Instantiate(results_ItemPrefab) as GameObject;
             instance.GetComponentInChildren<Text>().text = "[" + data[i*3] + "]" + " " + data[i*3 + 1] + " " + data[i*3 + 2];
