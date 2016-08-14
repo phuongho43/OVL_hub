@@ -32,6 +32,7 @@ TagManager:
   - DeleteProfile_Button
   - EditMeds_Icon
   - EditConds_Icon
+  - DeleteProfileDialog_Bg
   layers:
   - Default
   - TransparentFX

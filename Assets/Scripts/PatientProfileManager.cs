@@ -207,6 +207,12 @@ public class PatientProfileManager : MonoBehaviour {
         GameObject.FindGameObjectWithTag("UpdateProfileDialog_Inputfield").GetComponent<InputField>().text = string.Empty;
     }
 
+    public void ClearSearchResults() {
+        foreach (Transform child in results_ScrollContent.transform) {
+            GameObject.Destroy(child.gameObject);
+        }
+    }
+
     public void SearchForPatients() {
         List<string> data = new List<string>();
         string cond;
@@ -226,9 +232,7 @@ public class PatientProfileManager : MonoBehaviour {
             data = dbManager.GetPatientData("patient_id, first_name, last_name", "patients", cond);
         }
         //Debug.Log(data[0]);
-        foreach (Transform child in results_ScrollContent.transform) {
-            GameObject.Destroy(child.gameObject);
-        }
+        ClearSearchResults();
         ScreenManager screenManager = GameObject.FindGameObjectWithTag("ScreenManager").GetComponent<ScreenManager>();
         GameObject startTestButton = GameObject.FindGameObjectWithTag("StartTest_Button").transform.GetChild(0).gameObject;
         GameObject deleteProfileButton = GameObject.FindGameObjectWithTag("DeleteProfile_Button").transform.GetChild(0).gameObject;
@@ -243,7 +247,14 @@ public class PatientProfileManager : MonoBehaviour {
                 screenManager.Set("Dashboard");
                 startTestButton.SetActive(true);
                 deleteProfileButton.SetActive(true);
+                ClearSearchResults();
             });
         }
+    }
+
+    public void DeleteThisPatient() {
+        string patient_id = id_textbox.GetComponent<Text>().text;
+        dbManager.DeletePatientData(patient_id);
+        GameObject.FindGameObjectWithTag("DeleteProfileDialog_Bg").GetComponent<CanvasGroup>().alpha = 0;
     }
 }

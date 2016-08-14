@@ -130,7 +130,7 @@ public class PatientDatabaseManager {
         }
     }
         
-	public void DeletePatientData (int patient_id) {
+	public void DeletePatientData (string patient_id) {
 		connectionString = "URI=file:" + Application.dataPath + "/hubDB.db";
 		using (IDbConnection dbConnection = new SqliteConnection(connectionString)) {
 			dbConnection.Open();
