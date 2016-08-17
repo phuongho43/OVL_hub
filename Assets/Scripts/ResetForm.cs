@@ -3,6 +3,8 @@ using System.Collections;
 
 public class ResetForm : MonoBehaviour {
 
+    // Resets the new patient form after submit is pressed so that currently filled inputfields don't carry over to the next time
+
     public GameObject Form;
     public Transform Container;
 

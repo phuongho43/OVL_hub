@@ -168,6 +168,7 @@ public class PatientProfileManager : MonoBehaviour {
         }
     }
 
+    // Retrieves the specific database column for GetAndAddDialogInput
     public void GetCorrespondingColumn() {
         // Get tag of game object that was just clicked on
         string objectTag = EventSystem.current.currentSelectedGameObject.tag;
@@ -190,6 +191,7 @@ public class PatientProfileManager : MonoBehaviour {
         updateColumn = TagToColumnName[objectTag];
 	}
 
+    // Used by the updating dialog box in the profile page for meds and conds panels
     public void preFillInputField() {
         string patient_id = id_textbox.GetComponent<Text>().text;
         string cond = "patient_id = " + "'" + patient_id + "'";
@@ -197,6 +199,7 @@ public class PatientProfileManager : MonoBehaviour {
         GameObject.FindGameObjectWithTag("UpdateProfileDialog_Inputfield").GetComponent<InputField>().text = currentValue;
     }
 
+    // Updating profile page info by clicking the specific fields and filling in new data through a dialog box
     public void GetAndAddDialogInput() {
         string patient_id = id_textbox.GetComponent<Text>().text;
         Dictionary<string,string> columnAndValue = new Dictionary<string,string>();
@@ -207,6 +210,7 @@ public class PatientProfileManager : MonoBehaviour {
         GameObject.FindGameObjectWithTag("UpdateProfileDialog_Inputfield").GetComponent<InputField>().text = string.Empty;
     }
 
+    // Clears all item in the results panel on the main page
     public void ClearSearchResults() {
         foreach (Transform child in results_ScrollContent.transform) {
             GameObject.Destroy(child.gameObject);
