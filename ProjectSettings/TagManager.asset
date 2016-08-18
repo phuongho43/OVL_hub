@@ -33,6 +33,7 @@ TagManager:
   - EditMeds_Icon
   - EditConds_Icon
   - DeleteProfileDialog_Bg
+  - DevicesManager
   layers:
   - Default
   - TransparentFX

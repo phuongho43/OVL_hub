@@ -101,6 +101,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38f3907b06a81fa44ae6704404100723, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  marker: {fileID: 168558}
+  sampleNameTextBox: {fileID: 158596}
+  sampleName: 
   maxMarkerImageNumber: 8
 --- !u!114 &11430158
 MonoBehaviour:

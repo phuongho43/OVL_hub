@@ -7,21 +7,13 @@ public class PatientRepManager : MonoBehaviour {
 
     // Attach this script to the PatientRep gameobject
 
-    private GameObject marker;
+    public GameObject marker;
+    public GameObject sampleNameTextBox;
+    public string sampleName;
     public int maxMarkerImageNumber;
 
-	// Use this for initialization
-	void Start () {
-        
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
         
     public void NextImage() {
-        marker = transform.GetChild(0).gameObject;
         Image markerImage = marker.GetComponent<Image>();
         int currentImageName = Int32.Parse(markerImage.sprite.name);
         if (currentImageName < maxMarkerImageNumber) {
@@ -33,13 +25,12 @@ public class PatientRepManager : MonoBehaviour {
         }
     }
 
-    public void SetName(string id, string lastname) {
-        GameObject textbox = transform.GetChild(1).gameObject;
-        textbox.GetComponent<Text>().text = "[" + id + "] " + lastname;
+    public void SetName(string name) {
+        sampleNameTextBox.GetComponent<Text>().text = name;
+        sampleName = name;
     }
 
     public void DeletePatientRep() {
-        GameObject patientRep = transform.gameObject;
-        GameObject.Destroy(patientRep);
+        GameObject.Destroy(transform.gameObject);
     }
 }

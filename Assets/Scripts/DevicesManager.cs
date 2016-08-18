@@ -6,15 +6,24 @@ using UnityEngine.UI;
 
 public class DevicesManager : MonoBehaviour {
 
-    // Necessary references for starting tests
+    // Labels for samples
     public Text idTextbox;
     public Text lastnameTextbox;
+    // Extractor
     public Transform extractorListScrollContent;
     public GameObject extractorPrefab;
     public List<GameObject> activeExtractors = new List<GameObject>();
     private GameObject availableExtractor;
+    public List<string> finishedExtraction = new List<string>();
+    // Centrifuge
+    public Transform centriListScrollContent;
+    public GameObject centrifugePrefab;
+    public List<GameObject> activeCentrifuges = new List<GameObject>();
+    private GameObject availableCentrifuge;
+    public List<string> finishedCentrifugation = new List<string>();
 
-    public void PrepTest() {
+
+    public void PrepFirstDevice() {
         string patientID = idTextbox.GetComponent<Text>().text.Trim();
         string lastName = lastnameTextbox.GetComponent<Text>().text.Trim();
         string newSampleName = "[" + patientID + "] " + lastName;
@@ -38,20 +47,17 @@ public class DevicesManager : MonoBehaviour {
         else if (!allExtractorsBusy) {
             availableExtractor.GetComponent<FirstDevice>().SetInitPanel(newSampleName);
         }
-
         //DONE 1. get patient id and last name from profile page
-        // 2. instantiate extractorPrefab as child of extractorListScrollContent if (zero extractors in scrollcontent || all of them are in middle of tests)
+        //DONE 2. instantiate extractorPrefab as child of extractorListScrollContent if (zero extractors in scrollcontent || all of them are in middle of tests)
         //DONE 3. set initExtPanel active for available extractor (just instantiated or previously done so) with sampleName
         //DONE 4a. Cancel: sets initExtPanel inactive
         //DONE 4b. Confirm:
-        //      1. instantiate patientRepPrefab as child of extractorSamplesScrollContent (using the id and last name)
-        //      2. sets initExtPanel inactive
+        //DONE      1. instantiate patientRepPrefab as child of extractorSamplesScrollContent (using the id and last name)
+        //DONE      2. sets initExtPanel inactive
         //*      ** can go back to main page to start test for other profiles or click patientRep on the samples list to remove it       
-        // 5. Switch ON: adjust progress circle based on potentiometer reading
-        // 5b. Switch OFF: resets progress circle back to standby
-        // 6. if (progress = 100%) -->
-        // 7. store all patientRepPrefab in List<> extractionFinished
-        // 8. Destroy all children in extractorSamplesScrollContent
+    }
+
+    public void PrepMiddleDevice(string deviceType) {// Place this function in the Update() function: use an if statement to check whether there are any samples in finishedSamples        
         // 9. Update(): if (extractionFinished is not empty && (zero centrifuges in scrollcontent || all of them are in middle of tests))
         //      1. instantiate centriPrefab as child of centriListScrollContent
         //      2. set initCentPanel active for available centrifuge (go by index: first sample(List) goes to first device(List));
@@ -70,6 +76,5 @@ public class DevicesManager : MonoBehaviour {
         // 18. INSERT hiv load where patient_id = xxx for each sample in imager
         // 19. "Test completed for these patients:" (at top of the imager panel)
         // 20. OK: Destroy all children in imagerSamplesScrollContent
-
     }
 }
