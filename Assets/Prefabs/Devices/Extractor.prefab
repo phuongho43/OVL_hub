@@ -130,7 +130,7 @@ GameObject:
   m_Component:
   - 224: {fileID: 22465762}
   - 114: {fileID: 11458312}
-  - 114: {fileID: 11459222}
+  - 114: {fileID: 11484926}
   m_Layer: 5
   m_Name: Extractor
   m_TagString: Untagged
@@ -302,6 +302,21 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &153280
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 224: {fileID: 22428240}
+  m_Layer: 5
+  m_Name: Placeholder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
 --- !u!1 &155970
 GameObject:
   m_ObjectHideFlags: 1
@@ -867,9 +882,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 11459222}
+      - m_Target: {fileID: 11484926}
         m_MethodName: StoreFinishedSamples
-        m_Mode: 1
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -1180,7 +1195,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 11459222}
+      - m_Target: {fileID: 11484926}
         m_MethodName: InstantiatePatientRep
         m_Mode: 1
         m_Arguments:
@@ -1678,26 +1693,6 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &11459222
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 124934}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6f5f65b5efbc4f34bbba7cce4c3cad3d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  deviceTitle: {fileID: 127042}
-  initPanel: {fileID: 162832}
-  initPanelSampleName: {fileID: 139092}
-  donePanel: {fileID: 115448}
-  repListScrollContent: {fileID: 22402428}
-  toggleSwitch: {fileID: 164410}
-  patientRepPrefab: {fileID: 146706, guid: 52ab15ccd326d524292b04e915a631cd, type: 2}
-  progressCircle: {fileID: 122074}
-  percentCompletedText: {fileID: 145448}
 --- !u!114 &11463144
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1895,6 +1890,21 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: 'Please insert the test sample for:'
+--- !u!114 &11484926
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 124934}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f5f65b5efbc4f34bbba7cce4c3cad3d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  deviceStandby: 0
+  patientRepPrefab: {fileID: 146706, guid: 52ab15ccd326d524292b04e915a631cd, type: 2}
+  initPanelSelectionPrefab: {fileID: 0}
+  startTrackingKey: 49
 --- !u!114 &11491720
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2294,7 +2304,7 @@ RectTransform:
   - {fileID: 22414610}
   - {fileID: 22491040}
   m_Father: {fileID: 22465762}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_AnchorMin: {x: 0.804, y: 0.8466364}
   m_AnchorMax: {x: 0.9514241, y: 1}
   m_AnchoredPosition: {x: 0, y: 0.13999939}
@@ -2392,6 +2402,24 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 62, y: 62}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!224 &22428240
+RectTransform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 153280}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Children: []
+  m_Father: {fileID: 22465762}
+  m_RootOrder: 2
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &22439198
 RectTransform:
   m_ObjectHideFlags: 1
@@ -2424,7 +2452,7 @@ RectTransform:
   m_Children:
   - {fileID: 22402428}
   m_Father: {fileID: 22465762}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_AnchorMin: {x: 0.06133865, y: 0.04927274}
   m_AnchorMax: {x: 0.93666136, y: 0.521}
   m_AnchoredPosition: {x: 0.115448, y: -1.050003}
@@ -2515,6 +2543,7 @@ RectTransform:
   m_Children:
   - {fileID: 22441222}
   - {fileID: 22479706}
+  - {fileID: 22428240}
   - {fileID: 22405770}
   - {fileID: 22469138}
   - {fileID: 22439460}
@@ -2541,7 +2570,7 @@ RectTransform:
   - {fileID: 22470584}
   - {fileID: 22439198}
   m_Father: {fileID: 22465762}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_AnchorMin: {x: 0.5, y: 0.698}
   m_AnchorMax: {x: 0.5, y: 0.698}
   m_AnchoredPosition: {x: 0.20056438, y: 0.3690796}
@@ -2633,11 +2662,11 @@ RectTransform:
   - {fileID: 22425100}
   - {fileID: 22487634}
   m_Father: {fileID: 22465762}
-  m_RootOrder: 6
-  m_AnchorMin: {x: 0.043144833, y: 0.5361515}
-  m_AnchorMax: {x: 0.95862323, y: 0.9775758}
-  m_AnchoredPosition: {x: -0.24722004, y: -0.19999981}
-  m_SizeDelta: {x: 0.78864, y: 0}
+  m_RootOrder: 7
+  m_AnchorMin: {x: 0.036000002, y: 0.53621215}
+  m_AnchorMax: {x: 0.95862323, y: 0.9772122}
+  m_AnchoredPosition: {x: 0.7527771, y: -0.19999695}
+  m_SizeDelta: {x: -1.2113647, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &22477930
 RectTransform:
@@ -2690,7 +2719,7 @@ RectTransform:
   - {fileID: 22485876}
   - {fileID: 22487166}
   m_Father: {fileID: 22465762}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_AnchorMin: {x: 0.043144833, y: 0.04927274}
   m_AnchorMax: {x: 0.95862323, y: 0.521}
   m_AnchoredPosition: {x: -0.000024318695, y: -1.0614967}
