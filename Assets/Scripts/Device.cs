@@ -11,7 +11,6 @@ public class Device : MonoBehaviour {
     public GameObject patientRepPrefab;
     public GameObject initPanelSelectionPrefab;
     public KeyCode startTrackingKey;
-    public string port;
     public PatientDatabaseManager dbManager = new PatientDatabaseManager();
     private GameObject devicesManager;
     private GameObject deviceTitle;
@@ -21,8 +20,11 @@ public class Device : MonoBehaviour {
     private GameObject donePanel;
     private Transform repListScrollContent;
     private GameObject toggleSwitch;
+    private GameObject portTextInput;
     private GameObject progressCircle;
     private GameObject percentCompletedText;
+    private SerialPort serialPort;
+    private bool startTrackingBool = false;
     private int progress = 0;
     private string currentSampleName = "";
 
@@ -36,22 +38,28 @@ public class Device : MonoBehaviour {
         donePanel = transform.GetChild(7).gameObject;
         repListScrollContent = transform.GetChild(5).GetChild(0);
         toggleSwitch = transform.GetChild(3).gameObject;
+        portTextInput = transform.GetChild(8).GetChild(1).GetChild(1).GetChild(0).gameObject;
         progressCircle = transform.GetChild(4).GetChild(0).gameObject;
         percentCompletedText = transform.GetChild(4).GetChild(1).GetChild(0).gameObject;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-        if (toggleSwitch.GetComponent<Toggle>().isOn) {
-            StartTracking_Test(startTrackingKey);
-            StartTracking(port);
+        if (toggleSwitch.GetComponent<Toggle>().isOn && startTrackingBool == false) {
+            portPanel.SetActive(true);
+        }
+
+        if (startTrackingBool == true) {
+            StartTracking();
         }
         else {
             StopTracking();
         }
+
         if (progress >= 100) {
             donePanel.SetActive(true);
             toggleSwitch.GetComponent<Toggle>().isOn = false;
+            startTrackingBool = false;
             progress = 0;
         }
 	}
@@ -122,10 +130,6 @@ public class Device : MonoBehaviour {
         deviceStandby = false;
     }
 
-    public void SetPortPanel() {
-        portPanel.SetActive(true);
-    }
-
     private void StartTracking_Test(KeyCode testKey) {// Place this function on the toggle switch: --> "DONE!" panel pops up when progress is at 100%
         // TEST
         if (Input.GetKeyDown(testKey)) { // Change this when arduino integration finished
@@ -137,8 +141,14 @@ public class Device : MonoBehaviour {
         //DONE 5. Switch ON: adjust progress circle based on potentiometer reading
     }
 
-    private void StartTracking(string port) {
-        SerialPort serialPort = new SerialPort(port, 9600);
+    public void SetPort() {
+        string port = portTextInput.GetComponent<InputField>().text;
+        //try catch
+        serialPort = new SerialPort(port, 9600);
+        startTrackingBool = true;
+    }
+
+    private void StartTracking() {        
         progress = serialPort.ReadByte();
         progressCircle.GetComponent<Image>().fillAmount = progress / 100.0f;
         percentCompletedText.GetComponent<Text>().text = progress.ToString() + "%";
