@@ -66,6 +66,7 @@ public class PatientDatabaseManager {
 		return patient_data;
 	}
 
+    // data is a dictionary of "columns":"values"
     public void InsertPatientData(string tableName, Dictionary<string, string> data) {
         List<string> columns = new List<string>();
         List<string> values = new List<string>();

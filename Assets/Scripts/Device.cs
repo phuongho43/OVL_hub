@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO.Ports;
 
 public class Device : MonoBehaviour {
 
@@ -10,10 +11,13 @@ public class Device : MonoBehaviour {
     public GameObject patientRepPrefab;
     public GameObject initPanelSelectionPrefab;
     public KeyCode startTrackingKey;
+    public string port;
+    public PatientDatabaseManager dbManager = new PatientDatabaseManager();
     private GameObject devicesManager;
     private GameObject deviceTitle;
     private GameObject initPanel;
     private GameObject initPanelSampleName;
+    private GameObject portPanel;
     private GameObject donePanel;
     private Transform repListScrollContent;
     private GameObject toggleSwitch;
@@ -22,11 +26,13 @@ public class Device : MonoBehaviour {
     private int progress = 0;
     private string currentSampleName = "";
 
+
 	// Use this for initialization
 	void Awake () {
         devicesManager = GameObject.FindGameObjectWithTag("DevicesManager");
         deviceTitle = transform.GetChild(1).gameObject;
         initPanel = transform.GetChild(6).gameObject;
+        portPanel = transform.GetChild(8).gameObject;
         donePanel = transform.GetChild(7).gameObject;
         repListScrollContent = transform.GetChild(5).GetChild(0);
         toggleSwitch = transform.GetChild(3).gameObject;
@@ -37,7 +43,8 @@ public class Device : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         if (toggleSwitch.GetComponent<Toggle>().isOn) {
-            StartTracking(startTrackingKey);
+            StartTracking_Test(startTrackingKey);
+            StartTracking(port);
         }
         else {
             StopTracking();
@@ -64,15 +71,19 @@ public class Device : MonoBehaviour {
     }
 
     public void SetLaterInitPanel(List<string> inputSamples) {
+        initPanel.SetActive(true);
         Transform selectedSamplesScrollContent = transform.GetChild(6).GetChild(1).GetChild(1).GetChild(0);
-        if (initPanel.activeSelf == false) {
-            initPanel.SetActive(true);
-            foreach (string sampleName in inputSamples) {
+        List<string> namesInSelectionList = new List<string>();
+        foreach (Transform child in selectedSamplesScrollContent.transform) {
+            namesInSelectionList.Add(child.GetComponentInChildren<Text>().text);
+        }            
+        foreach (string sampleName in inputSamples) {
+            if (!namesInSelectionList.Contains(sampleName)) {
                 GameObject selectionInstance = Instantiate(initPanelSelectionPrefab) as GameObject;
                 selectionInstance.transform.SetParent(selectedSamplesScrollContent.transform, false);
                 selectionInstance.GetComponentInChildren<Text>().text = sampleName;
             }
-        }
+        }        
     }
 
     public void InstantiatePatientRep() {
@@ -111,16 +122,29 @@ public class Device : MonoBehaviour {
         deviceStandby = false;
     }
 
-    public void StartTracking(KeyCode testKey) {// Place this function on the toggle switch: --> "DONE!" panel pops up when progress is at 100%
+    public void SetPortPanel() {
+        portPanel.SetActive(true);
+    }
+
+    private void StartTracking_Test(KeyCode testKey) {// Place this function on the toggle switch: --> "DONE!" panel pops up when progress is at 100%
+        // TEST
         if (Input.GetKeyDown(testKey)) { // Change this when arduino integration finished
             progress += 5;
             progressCircle.GetComponent<Image>().fillAmount = progress / 100.0f;
             percentCompletedText.GetComponent<Text>().text = progress.ToString() + "%";
         }
+        // TEST
         //DONE 5. Switch ON: adjust progress circle based on potentiometer reading
     }
 
-    public void StopTracking() {
+    private void StartTracking(string port) {
+        SerialPort serialPort = new SerialPort(port, 9600);
+        progress = serialPort.ReadByte();
+        progressCircle.GetComponent<Image>().fillAmount = progress / 100.0f;
+        percentCompletedText.GetComponent<Text>().text = progress.ToString() + "%";
+    }
+
+    private void StopTracking() {
         progress = 0;
         progressCircle.GetComponent<Image>().fillAmount = 0f;
         percentCompletedText.GetComponent<Text>().text = "0%";
@@ -159,7 +183,28 @@ public class Device : MonoBehaviour {
         //DONE 8b. Destroy entire device main panel
     }
 
+    public string GetViralLoadValue() {
+        // interface with imager's python program
+        // Test
+        float loadValue = 252.0f;
+        return loadValue.ToString();
+        // Test
+    }
+
     public void RecordViralLoad() {
-        
+        foreach (Transform sample in repListScrollContent) {
+            string sampleName = sample.gameObject.GetComponent<PatientRepManager>().sampleName;
+            sampleName = sampleName.Trim();
+            char[] trimBrackets = {'[',']'};
+            string patientID = sampleName.Split(' ')[0].Trim(trimBrackets);
+            string viralLoad = GetViralLoadValue();
+            Debug.Log(patientID);
+            Dictionary<string,string> data = new Dictionary<string,string>();
+            data.Add("patient_id", patientID);
+            data.Add("load", viralLoad);
+            dbManager.InsertPatientData("hiv_load", data);
+            GameObject.Destroy(sample.gameObject);
+        }
+        GameObject.Destroy(transform.gameObject);
     }
 }

@@ -46,6 +46,10 @@ public class DevicesManager : MonoBehaviour {
         }
     }
 
+    public void AssignConnection() {
+        //
+    }
+
     public void PrepFirstDevice() {
         string patientID = idTextbox.GetComponent<Text>().text.Trim();
         string lastName = lastnameTextbox.GetComponent<Text>().text.Trim();

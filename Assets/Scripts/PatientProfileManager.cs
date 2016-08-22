@@ -26,6 +26,8 @@ public class PatientProfileManager : MonoBehaviour {
     public GameObject meds_ItemPrefab;
     public Transform conds_ScrollContent;
     public GameObject conds_ItemPrefab;
+    public Text viralLoad_textbox;
+    public Text testTime_textbox;
 
     // Main Page Search for Patients
     public GameObject mp_searchSelector;
@@ -77,6 +79,14 @@ public class PatientProfileManager : MonoBehaviour {
 //        Debug.Log("ClearForm: " + firstname_input.GetComponent<InputField>().text);
 //    }
 
+    private string UTCtoLocal(string utcDateString) {
+        DateTime convertedDate = DateTime.SpecifyKind(
+            DateTime.Parse(utcDateString),
+            DateTimeKind.Utc);
+        string localTime = convertedDate.ToLocalTime().ToString();
+        return localTime;
+    }
+
     // Changes text on patient profile according to data from GetPatientData
     public void SetProfileData(string patient_id) {
         if (patient_id == "new") {
@@ -116,6 +126,11 @@ public class PatientProfileManager : MonoBehaviour {
             condItem.GetComponentInChildren<Text>().text = listOfConds[i];
             condItem.transform.SetParent(conds_ScrollContent.transform, false);
         }
+        List<string> loadData = dbManager.GetPatientData("max(test_time), load", "hiv_load", cond);
+        viralLoad_textbox.GetComponent<Text>().text = loadData[1] + " copies/mL";
+        string timeUTC = loadData[0];
+        string testTime = UTCtoLocal(timeUTC);
+        testTime_textbox.GetComponent<Text>().text = testTime;
     }
 
     public void GetAndAddFormInput() {

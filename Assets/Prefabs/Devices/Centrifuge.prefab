@@ -1846,6 +1846,7 @@ MonoBehaviour:
   initPanelSelectionPrefab: {fileID: 104686, guid: 07faaca386cfffa439d1ec71aef2d5f7,
     type: 2}
   startTrackingKey: 50
+  port: 
 --- !u!114 &11468042
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3313,10 +3314,10 @@ RectTransform:
   - {fileID: 22472314}
   m_Father: {fileID: 22475330}
   m_RootOrder: 6
-  m_AnchorMin: {x: 0.036000002, y: 0.038000003}
-  m_AnchorMax: {x: 0.9657751, y: 0.9586901}
-  m_AnchoredPosition: {x: -0.16421509, y: 0.0000038146973}
-  m_SizeDelta: {x: -1.8129883, y: -2.600006}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: -0.0007095337, y: -0.7385559}
+  m_SizeDelta: {x: -0.41000366, y: -1.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!225 &22505736
 CanvasGroup:
