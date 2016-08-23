@@ -79,12 +79,12 @@ public class PatientProfileManager : MonoBehaviour {
 //        Debug.Log("ClearForm: " + firstname_input.GetComponent<InputField>().text);
 //    }
 
-    private string UTCtoLocal(string utcDateString) {
-        DateTime convertedDate = DateTime.SpecifyKind(
-            DateTime.Parse(utcDateString),
-            DateTimeKind.Utc);
-        string localTime = convertedDate.ToLocalTime().ToString();
-        return localTime;
+    private string UTCtoLocal(string date) {
+        if (!dbManager.ConsistsOfWhiteSpace(date)) {
+            DateTime convertedDate = DateTime.SpecifyKind(DateTime.Parse(date), DateTimeKind.Utc);
+            date = convertedDate.ToLocalTime().ToString();
+        }
+        return date;
     }
 
     // Changes text on patient profile according to data from GetPatientData

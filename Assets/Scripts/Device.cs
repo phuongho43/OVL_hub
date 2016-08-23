@@ -163,7 +163,11 @@ public class Device : MonoBehaviour {
 //		} else {
 //			trackingCase = 2;
 //		}
-        testButtonKey = (KeyCode)Enum.Parse(typeof(KeyCode), port);
+        try {
+            testButtonKey = (KeyCode)Enum.Parse(typeof(KeyCode), port);
+        } catch (ArgumentException) {
+            testButtonKey = KeyCode.X;
+        }
         trackingCase = 1;
 		startTrackingBool = true;
     }
