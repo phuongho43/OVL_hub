@@ -2686,7 +2686,6 @@ MonoBehaviour:
   patientRepPrefab: {fileID: 146706, guid: 52ab15ccd326d524292b04e915a631cd, type: 2}
   initPanelSelectionPrefab: {fileID: 104686, guid: 07faaca386cfffa439d1ec71aef2d5f7,
     type: 2}
-  startTrackingKey: 49
 --- !u!114 &11488178
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3952,10 +3951,10 @@ RectTransform:
   - {fileID: 22487166}
   m_Father: {fileID: 22465762}
   m_RootOrder: 6
-  m_AnchorMin: {x: 0.043144833, y: 0.04927274}
-  m_AnchorMax: {x: 0.95862323, y: 0.521}
-  m_AnchoredPosition: {x: -0.000024318695, y: -1.0614967}
-  m_SizeDelta: {x: 0, y: -0.123000026}
+  m_AnchorMin: {x: 0.043144833, y: 0.50757575}
+  m_AnchorMax: {x: 0.9514241, y: 0.9772122}
+  m_AnchoredPosition: {x: -0.20236492, y: -0.2486763}
+  m_SizeDelta: {x: 2, y: -0.1230011}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &22485876
 RectTransform:

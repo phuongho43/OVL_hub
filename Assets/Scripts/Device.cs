@@ -23,7 +23,7 @@ public class Device : MonoBehaviour {
     private GameObject portTextInput;
     private GameObject progressCircle;
     private GameObject percentCompletedText;
-    private SerialPort serialPort;
+    private SerialPort serialPort = new SerialPort();
 	private KeyCode testButtonKey;
 	private int trackingCase;
     private bool startTrackingBool = false;
@@ -147,21 +147,24 @@ public class Device : MonoBehaviour {
 
     public void SetPort() {
         string port = portTextInput.GetComponent<InputField>().text;
-		if (!ConsistsOfWhiteSpace(port)) {
-			try {
-				serialPort = new SerialPort(port, 9600);
-				trackingCase = 0;
-			} catch (IOException) {
-				try {
-					testButtonKey = (KeyCode)Enum.Parse(typeof(KeyCode), port);
-					trackingCase = 1;
-				} catch {
-				
-				}
-			}
-		} else {
-			trackingCase = 2;
-		}
+//		if (!ConsistsOfWhiteSpace(port)) {
+//			try {
+//                serialPort.BaudRate = 9600;
+//                serialPort.PortName = port;
+//				trackingCase = 0;
+//            } catch (Exception) {
+//				try {
+//					testButtonKey = (KeyCode)Enum.Parse(typeof(KeyCode), port);
+//					trackingCase = 1;
+//                } catch (Exception) {
+//				
+//				}
+//			}
+//		} else {
+//			trackingCase = 2;
+//		}
+        testButtonKey = (KeyCode)Enum.Parse(typeof(KeyCode), port);
+        trackingCase = 1;
 		startTrackingBool = true;
     }
 
