@@ -179,8 +179,8 @@ public class Device : MonoBehaviour {
     }
 
 	private void StartTracking_Test(KeyCode testButtonKey) {
-		if (Input.GetKeyDown(testButtonKey)) {
-			progress += 5;
+        if (Input.GetKeyDown(testButtonKey)) {
+			progress += 10;
 			progressCircle.GetComponent<Image>().fillAmount = progress / 100.0f;
 			percentCompletedText.GetComponent<Text>().text = progress.ToString() + "%";
 		}

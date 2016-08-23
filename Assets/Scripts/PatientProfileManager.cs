@@ -55,7 +55,7 @@ public class PatientProfileManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        
+        dbManager.CreateTables(); 
 	}
 	
 	// Update is called once per frame

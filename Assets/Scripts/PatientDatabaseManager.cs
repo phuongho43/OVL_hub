@@ -9,13 +9,29 @@ using UnityEngine.UI;
 
 public class PatientDatabaseManager {
 
-	private string connectionString;
+    private string connectionString;
 
     public bool ConsistsOfWhiteSpace(string s){
         foreach(char c in s){
             if(c != ' ') return false;
         }
         return true;
+    }
+
+    public void CreateTables() {
+        connectionString = "URI=file:" + Application.dataPath + "/hubDB.db";
+        using (IDbConnection dbConnection = new SqliteConnection(connectionString)) {
+            dbConnection.Open();
+            using (IDbCommand dbCmd = dbConnection.CreateCommand()) {
+                string sqlQuery = "CREATE TABLE if not exists 'patients' ('patient_id' INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE, 'first_name' TEXT, 'last_name' TEXT, 'gender' TEXT, 'date_of_birth' TEXT, 'weight' REAL, 'height' REAL, 'phone_number' TEXT, 'appointment' TEXT, 'latest_visit_date' TEXT, 'latest_visit_doctor' TEXT, 'medications' TEXT, 'medical_conditions' TEXT, 'profile_pic_directory' TEXT)";
+                dbCmd.CommandText = sqlQuery;
+                dbCmd.ExecuteScalar();
+                sqlQuery = "CREATE TABLE if not exists 'hiv_load' ('patient_id' INTEGER, 'test_time' TEXT DEFAULT CURRENT_TIMESTAMP, 'load' REAL, FOREIGN KEY('patient_id') REFERENCES 'patients'('patient_id'))";
+                dbCmd.CommandText = sqlQuery;
+                dbCmd.ExecuteScalar();
+                dbConnection.Close();
+            }
+        }
     }
 
     // Retrieves id of latest patient: used for grabbing data for the profile page right after submitting the form
@@ -39,11 +55,11 @@ public class PatientDatabaseManager {
 		}
 		return last_patient_id;
 	}
-
+        
     public List<string> GetPatientData(string col,string tablename, string cond) {
         // Dictionary might be better if order of DB columns get changed
 		List<string> patient_data = new List<string>();
-		connectionString = "URI=file:" + Application.dataPath + "/hubDB.db";
+        connectionString = "URI=file:" + Application.dataPath + "/hubDB.db";
 		using (IDbConnection dbConnection = new SqliteConnection(connectionString)) {
 			dbConnection.Open();
 			using (IDbCommand dbCmd = dbConnection.CreateCommand()) {
