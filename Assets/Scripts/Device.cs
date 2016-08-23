@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.IO.Ports;
 
 public class Device : MonoBehaviour {
@@ -10,7 +11,6 @@ public class Device : MonoBehaviour {
     public bool deviceStandby = false;
     public GameObject patientRepPrefab;
     public GameObject initPanelSelectionPrefab;
-    public KeyCode startTrackingKey;
     public PatientDatabaseManager dbManager = new PatientDatabaseManager();
     private GameObject devicesManager;
     private GameObject deviceTitle;
@@ -24,6 +24,8 @@ public class Device : MonoBehaviour {
     private GameObject progressCircle;
     private GameObject percentCompletedText;
     private SerialPort serialPort;
+	private KeyCode testButtonKey;
+	private int trackingCase;
     private bool startTrackingBool = false;
     private int progress = 0;
     private string currentSampleName = "";
@@ -49,8 +51,14 @@ public class Device : MonoBehaviour {
             portPanel.SetActive(true);
         }
 
-        if (startTrackingBool == true) {
-            StartTracking();
+		if (startTrackingBool == true) {
+			if (trackingCase == 0) {
+				StartTracking();
+			} else if (trackingCase == 1) {
+				StartTracking_Test(testButtonKey);
+			} else {
+				// setActive button that sets progress = 100
+			}
         }
         else {
             StopTracking();
@@ -130,22 +138,31 @@ public class Device : MonoBehaviour {
         deviceStandby = false;
     }
 
-    private void StartTracking_Test(KeyCode testKey) {// Place this function on the toggle switch: --> "DONE!" panel pops up when progress is at 100%
-        // TEST
-        if (Input.GetKeyDown(testKey)) { // Change this when arduino integration finished
-            progress += 5;
-            progressCircle.GetComponent<Image>().fillAmount = progress / 100.0f;
-            percentCompletedText.GetComponent<Text>().text = progress.ToString() + "%";
-        }
-        // TEST
-        //DONE 5. Switch ON: adjust progress circle based on potentiometer reading
-    }
+	private bool ConsistsOfWhiteSpace(string s){
+		foreach(char c in s){
+			if(c != ' ') return false;
+		}
+		return true;
+	}
 
     public void SetPort() {
         string port = portTextInput.GetComponent<InputField>().text;
-        //try catch
-        serialPort = new SerialPort(port, 9600);
-        startTrackingBool = true;
+		if (!ConsistsOfWhiteSpace(port)) {
+			try {
+				serialPort = new SerialPort(port, 9600);
+				trackingCase = 0;
+			} catch (IOException) {
+				try {
+					testButtonKey = (KeyCode)Enum.Parse(typeof(KeyCode), port);
+					trackingCase = 1;
+				} catch {
+				
+				}
+			}
+		} else {
+			trackingCase = 2;
+		}
+		startTrackingBool = true;
     }
 
     private void StartTracking() {        
@@ -153,6 +170,14 @@ public class Device : MonoBehaviour {
         progressCircle.GetComponent<Image>().fillAmount = progress / 100.0f;
         percentCompletedText.GetComponent<Text>().text = progress.ToString() + "%";
     }
+
+	private void StartTracking_Test(KeyCode testButtonKey) {
+		if (Input.GetKeyDown(testButtonKey)) {
+			progress += 5;
+			progressCircle.GetComponent<Image>().fillAmount = progress / 100.0f;
+			percentCompletedText.GetComponent<Text>().text = progress.ToString() + "%";
+		}
+	}
 
     private void StopTracking() {
         progress = 0;
